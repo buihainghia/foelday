@@ -3,6 +3,7 @@ const CryptoJS = require('crypto-js');
 const jwt = require('jsonwebtoken');
 const generateOtp = require('../utils/otp_generator');
 const sendMail = require('../utils/smtp_function');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
     createUser: async (req, res) => {
@@ -33,7 +34,8 @@ module.exports = {
                 password: hashedPassword,
                 userType: 'Client',
                 otp,
-                otpExpires
+                otpExpires,
+                uid: uuidv4(),
             });
 
             sendMail(newUser.email, otp);

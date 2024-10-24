@@ -55,7 +55,7 @@ app.use('/api/orders', orderRoute);
 app.use('/api/drivers', driverRoute);
 app.use('/api/rating', ratingRoute);
 
-const PORT = process.env.PORT || 6002;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
