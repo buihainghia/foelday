@@ -30,16 +30,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// Cấu hình CORS
-const corsOptions = {
-    origin: 'https://foelday.onrender.com', // Địa chỉ miền frontend mà bạn muốn cho phép
-    methods: [ 'GET', 'POST', 'PUT', 'DELETE' ], // Các phương thức HTTP cho phép
-    allowedHeaders: [ 'Content-Type', 'Authorization' ], // Các header cho phép
-    credentials: true, // Cho phép gửi cookie từ client
-};
+// Cấu hình COR
 
 // Sử dụng middleware cors
-app.use(cors(corsOptions));
+app.use(cors());
 app.set('port', process.env.PORT || 6000)
 
 // Connect to DB
