@@ -14,43 +14,22 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-const verifyTokenAndAuthorization = (req, res, next) => {
-    verifyToken(req, res, () => {
-        if (req.user.userType === 'Client' || req.user.userType === 'Vendor' || req.user.userType === 'Admin' || req.user.userType === 'Driver') {
-            next();
-        } else {
-            res.status(403).json({ message: 'You are not authorized!' });
-        }
-    });
+const verifyRole = (roles) => {
+    return (req, res, next) => {
+        verifyToken(req, res, () => {
+            if (roles.includes(req.user.userType)) {
+                next();
+            } else {
+                res.status(403).json({ message: 'You are not authorized!' });
+            }
+        });
+    };
 };
 
-const verifyTokenAndAdmin = (req, res, next) => {
-    verifyToken(req, res, () => {
-        if (req.user.userType === 'Admin') {
-            next();
-        } else {
-            res.status(403).json({ message: 'You are not authorized!' });
-        }
-    });
+module.exports = {
+    verifyToken,
+    verifyTokenAndAuthorization: verifyRole([ 'Client', 'Vendor', 'Admin', 'Driver' ]),
+    verifyTokenAndAdmin: verifyRole([ 'Admin' ]),
+    verifyTokenAndDriver: verifyRole([ 'Driver', 'Admin' ]),
+    verifyTokenAndVendor: verifyRole([ 'Vendor', 'Admin' ]),
 };
-
-const verifyTokenAndDriver = (req, res, next) => {
-    verifyToken(req, res, () => {
-        if (req.user.userType === 'Driver' || req.user.userType === 'Admin') {
-            next();
-        } else {
-            res.status(403).json({ message: 'You are not authorized!' });
-        }
-    });
-};
-
-const verifyTokenAndVendor = (req, res, next) => {
-    verifyToken(req, res, () => {
-        if (req.user.userType === 'Vendor' || req.user.userType === 'Admin') {
-            next();
-        } else {
-            res.status(403).json({ message: 'You are not authorized!' });
-        }
-    });
-};
-module.exports = { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin, verifyTokenAndDriver, verifyTokenAndVendor };
