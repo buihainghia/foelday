@@ -155,17 +155,25 @@ module.exports = {
         }
     },
 
-    getFoodsBycategory: async (req, res) => {
-        const category = req.params.category;
+    getFoodsByCategory: async (req, res) => {
+    const category = req.params.category;
 
-        try {
-            const foods = await Food.find({ category: category });
-            if (foods.length === 0) {
-                return res.status(200).json([]);
-            }
+    try {
+        // Check if the category is "all"
+        if (category === 'all') {
+            // Fetch all food items if the category is "all"
+            const foods = await Food.find({});
             return res.status(200).json(foods);
-        } catch (error) {
-            return res.status(500).json({ message: error.message });
         }
+
+        // Fetch foods by specific category
+        const foods = await Food.find({ category: category });
+        if (foods.length === 0) {
+            return res.status(200).json([]);
+        }
+        return res.status(200).json(foods);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
+}
 }
