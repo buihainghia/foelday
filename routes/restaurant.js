@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const restaurantController = require('../controllers/restaurantController')
+const restaurantController = require('../controllers/RestaurantController')
 const { verifyToken } = require('../middleware/verifyToken')
 
 router.post('/', restaurantController.addRestaurant)
