@@ -44,7 +44,7 @@ module.exports = {
             if (address) {
                 return res.status(200).json({ message: 'Address deleted successfully' });
             } else {
-                return res.status(404).json({ message: 'Address not found' });
+                return res.status(201).json([]);
             }
         } catch (error) {
             res.status(500).json({ message: 'Server Error' });
@@ -64,7 +64,7 @@ module.exports = {
                 await User.findByIdAndUpdate(userId, { address: addressId });
                 return res.status(200).json({ message: 'Address updated successfully' });
             } else {
-                return res.status(404).json({ message: 'Address not found' });
+                return res.status(200).json([]);
             }
         } catch (error) {
 

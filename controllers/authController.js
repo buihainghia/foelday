@@ -73,6 +73,10 @@ module.exports = {
                 return res.status(400).json({ message: 'Wrong password' });
             }
 
+            if (!user.verification) {
+                return res.status(400).json({ status: false, message: 'Please verify your email' });
+            }
+
             const userToken = jwt.sign({ id: user._id, userType: user.userType, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             const { password, otp, ...others } = user._doc;
@@ -97,7 +101,7 @@ module.exports = {
 
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(201).json([]);
             }
 
             const now = new Date();
