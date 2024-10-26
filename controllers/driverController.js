@@ -18,7 +18,7 @@ module.exports = {
         try {
             const driver = await Driver.findById(driverId);
             if (!driver) {
-                return res.status(201).json([]);
+                return res.status(404).json({ error: 'Driver not found' });
             }
 
             driver.isAvailable = !driver.isAvailable;

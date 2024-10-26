@@ -20,7 +20,7 @@ module.exports = {
         try {
             const restaurant = await Restaurant.findById(id)
             if (!restaurant) {
-                return res.status(201).json([])
+                return res.status(404).send()
             }
             res.status(200).send(restaurant);
         } catch (error) {
@@ -82,7 +82,7 @@ module.exports = {
         try {
             const restaurant = await Restaurant.findByIdAndDelete(id)
             if (!restaurant) {
-                return res.status(201).json([])
+                return res.status(404).send()
             }
             res.status(200).send("Restaurant deleted successfully");
         } catch (error) {

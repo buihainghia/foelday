@@ -22,7 +22,7 @@ module.exports = {
         try {
             const food = await Food.findById(foodId);
             if (!food) {
-                return res.status(200).json([]);
+                return res.status(404).json({ message: 'Food not found' });
             }
             return res.status(200).json(food);
         } catch (error) {
@@ -51,7 +51,7 @@ module.exports = {
             if (randomFoodList.length) {
                 return res.status(200).json(randomFoodList);
             } else {
-                return res.status(200).json([]);
+                return res.status(404).json({ message: 'No food found' });
             }
         } catch (error) {
             return res.status(500).json({ message: error.message });
@@ -65,7 +65,7 @@ module.exports = {
         try {
             const foods = await Food.find({ restaurant: id });
             if (foods.length === 0) {
-                return res.status(201).json([]);
+                return res.status(200).json("No food found for this restaurant");
             }
             return res.status(200).json(foods);
         } catch (error) {

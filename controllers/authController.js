@@ -7,7 +7,6 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
     createUser: async (req, res) => {
-
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         if (!emailRegex.test(req.body.email)) {
@@ -39,7 +38,7 @@ module.exports = {
                 uid: uuidv4(),
             });
 
-            // sendMail(newUser.email, otp);
+            sendMail(newUser.email, otp);
 
             const result = await newUser.save();
             return res.status(201).json({ message: 'User created', result });
@@ -73,10 +72,6 @@ module.exports = {
                 return res.status(400).json({ message: 'Wrong password' });
             }
 
-            if (!user.verification) {
-                return res.status(400).json({ status: false, message: 'Please verify your email' });
-            }
-
             const userToken = jwt.sign({ id: user._id, userType: user.userType, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             const { password, otp, ...others } = user._doc;
@@ -101,7 +96,7 @@ module.exports = {
 
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(201).json([]);
+                return res.status(404).json({ message: 'User not found' });
             }
 
             const now = new Date();
@@ -124,6 +119,5 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    },
-
+    }
 };
