@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/userController')
-const { verifyTokenAndAuthorization } = require('../middleware/verifyToken')
+const { verifyTokenAndAuthorization, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
 router.get('/', verifyTokenAndAuthorization, userController.getUser)
 router.delete('/', verifyTokenAndAuthorization, userController.deleteUser)
 router.post('/verify/:otp', verifyTokenAndAuthorization, userController.verifyAccount)
 router.get('/verify_phone/:phone', verifyTokenAndAuthorization, userController.verifyPhone)
+router.get('/admin-get-all-users', verifyTokenAndAdmin, userController.getUserByAdmin)
 
 module.exports = router
 

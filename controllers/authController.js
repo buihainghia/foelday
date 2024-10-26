@@ -38,7 +38,7 @@ module.exports = {
                 uid: uuidv4(),
             });
 
-            sendMail(newUser.email, otp);
+            // sendMail(newUser.email, otp);
 
             const result = await newUser.save();
             return res.status(201).json({ message: 'User created', result });
@@ -116,6 +116,47 @@ module.exports = {
             } else {
                 return res.status(400).json({ message: 'OTP is still valid. Please wait before requesting a new one.' });
             }
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    },
+
+    createAdmin: async (req, res) => {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!emailRegex.test(req.body.email)) {
+            return res.status(400).json({ message: 'Email is not valid' });
+        }
+
+        const minPasswordLength = 8;
+        if (req.body.password.length < minPasswordLength) {
+            return res.status(400).json({ message: `Password must be at least ${minPasswordLength} characters` });
+        }
+
+        try {
+            const user = await User.findOne({ email: req.body.email });
+            if (user) {
+                return res.status(400).json({ message: 'Email already exists' });
+            }
+
+            const hashedPassword = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString();
+            const otp = generateOtp();
+            const otpExpires = new Date(Date.now() + 5 * 60000);
+
+            const newUser = new User({
+                username: req.body.username,
+                email: req.body.email,
+                password: hashedPassword,
+                userType: 'Admin',
+                otp,
+                otpExpires,
+                uid: uuidv4(),
+            });
+
+            sendMail(newUser.email, otp);
+
+            const result = await newUser.save();
+            return res.status(201).json({ message: 'Admin created', result });
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
