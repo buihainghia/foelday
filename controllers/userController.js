@@ -79,7 +79,7 @@ module.exports = {
     },
     getUserByAdmin: async (req, res) => {
         try {
-            const users = await User.find({ userType: 'Client' }, { password: 0, __v: 0, createdAt: 0, updatedAt: 0 });
+            const users = await User.find({ userType: { $in: [ 'Client', 'Vendor', 'Driver' ] } }, { password: 0, __v: 0, createdAt: 0, updatedAt: 0 });
             return res.status(200).json(users);
         } catch (error) {
             return res.status(500).json({ message: error.message });
