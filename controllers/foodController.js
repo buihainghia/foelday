@@ -49,6 +49,7 @@ module.exports = {
             }
 
             if (randomFoodList.length) {
+                randomFoodList = await Food.populate(randomFoodList, { path: 'restaurant', select: 'title imageUrl logoUrl coords' });
                 return res.status(200).json(randomFoodList);
             } else {
                 return res.status(404).json({ message: 'No food found' });
@@ -65,7 +66,7 @@ module.exports = {
         try {
             const foods = await Food.find({ restaurant: id });
             if (foods.length === 0) {
-                return res.status(200).json([]);
+                return res.status(200).json("No food found for this restaurant");
             }
             return res.status(200).json(foods);
         } catch (error) {
