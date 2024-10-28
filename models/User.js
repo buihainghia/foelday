@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        default: "0362604259"
+        default: "0123456789"
     },
     phoneVerification: {
         type: Boolean,
