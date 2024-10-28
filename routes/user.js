@@ -8,6 +8,7 @@ router.delete('/', verifyTokenAndAuthorization, userController.deleteUser)
 router.post('/verify/:otp', verifyTokenAndAuthorization, userController.verifyAccount)
 router.get('/verify_phone/:phone', verifyTokenAndAuthorization, userController.verifyPhone)
 router.get('/admin-get-all-users', verifyTokenAndAdmin, userController.getUserByAdmin)
+router.patch('/', verifyTokenAndAuthorization, userController.updateUser)
 
 module.exports = router
 
