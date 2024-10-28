@@ -3,32 +3,21 @@ const Cart = require('../models/Cart');
 module.exports = {
     addProductToCart: async (req, res) => {
         const userId = req.user.id;
-        const { productId, quantity, totalPrice, additives } = req.body;
+        const { productId, quantity, totalPrice, additives, note } = req.body;
         let count;
         try {
-            const existingProduct = await Cart.findOne({ userId: userId, productId: productId });
             count = await Cart.countDocuments({ userId: userId });
-
-            if (existingProduct) {
-                existingProduct.totalPrice += totalPrice * quantity;
-                existingProduct.quantity += quantity;
-
-                await existingProduct.save();
-                return res.status(200).json({ message: 'Product added to cart successfully', count });
-            } else {
-                const newCartItem = new Cart({
-                    userId,
-                    productId,
-                    totalPrice,
-                    quantity,
-                    additives
-                });
-
-                await newCartItem.save();
-                count = await Cart.countDocuments({ userId: userId });
-
-                return res.status(200).json({ message: 'Product added to cart successfully', count });
-            }
+            const newCartItem = new Cart({
+                userId,
+                productId,
+                totalPrice,
+                quantity,
+                additives,
+                note
+            });
+            await newCartItem.save();
+            count = await Cart.countDocuments({ userId: userId });
+            return res.status(200).json({ message: 'Product added to cart successfully', count });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
