@@ -95,6 +95,13 @@ module.exports = {
         const search = req.params.search;
 
         try {
+            if (search === 'all') {
+                const foods = await Food.find();
+                if (foods.length === 0) {
+                    return res.status(200).json([]);
+                }
+                return res.status(200).json(foods);
+            }
             const results = await Food.aggregate([
                 {
                     $search: {
@@ -108,10 +115,9 @@ module.exports = {
                     }
                 }
             ]);
-
+            await Food.populate(results, { path: 'restaurant', select: 'title imageUrl logoUrl coords' });
             return res.status(200).json(results);
         } catch (error) {
-
             return res.status(500).json({ message: error.message });
         }
     },
