@@ -96,13 +96,14 @@ module.exports = {
 
         try {
             if (search === 'all') {
-                const foods = await Food.find();
+                let foods = await Food.find();  // Sử dụng let để có thể gán lại giá trị
                 if (foods.length === 0) {
                     return res.status(200).json([]);
                 }
+                foods = await Food.populate(foods, { path: 'restaurant', select: 'title imageUrl logoUrl coords' });
                 return res.status(200).json(foods);
             }
-            const results = await Food.aggregate([
+            let results = await Food.aggregate([
                 {
                     $search: {
                         index: 'foods',
@@ -115,8 +116,12 @@ module.exports = {
                     }
                 }
             ]);
-            await Food.populate(results, { path: 'restaurant', select: 'title imageUrl logoUrl coords' });
-            return res.status(200).json(results);
+            if (results.length) {
+                results = await Food.populate(results, { path: 'restaurant', select: 'title imageUrl logoUrl coords' });
+                return res.status(200).json(results);
+            } else {
+                return res.status(200).json(results);
+            }
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
