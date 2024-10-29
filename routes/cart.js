@@ -5,6 +5,8 @@ const { verifyTokenAndAuthorization } = require('../middleware/verifyToken');
 router.post('/', verifyTokenAndAuthorization, cartController.addProductToCart);
 
 router.get('/decrement/:id', verifyTokenAndAuthorization, cartController.decrementProductQuantity);
+router.get('/increment/:id', verifyTokenAndAuthorization, cartController.incrementProductQuantity);
+
 
 router.delete('/:id', verifyTokenAndAuthorization, cartController.removeCartItem);
 
