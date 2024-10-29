@@ -17,7 +17,7 @@ module.exports = {
             });
             await newCartItem.save();
             count = await Cart.countDocuments({ userId: userId });
-            return res.status(200).json({ message: 'Product added to cart successfully', count });
+            return res.status(200).json({ newCartItem });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
