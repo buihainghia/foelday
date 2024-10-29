@@ -32,7 +32,7 @@ module.exports = {
                 path: 'productId',
                 select: 'imageUrl title restaurant rating ratingCount '
             });
-            return res.status(200).json(cartItems);
+            return res.status(200).json({ cartItems });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
