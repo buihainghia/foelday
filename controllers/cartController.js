@@ -17,33 +17,22 @@ module.exports = {
             });
             await newCartItem.save();
             count = await Cart.countDocuments({ userId: userId });
+            // return res.status(200).json({ message: 'Product added to cart successfully', count });
             return res.status(200).json({ newCartItem });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
     },
-    removeCartItem: async (req, res) => {
-        const cartItemId = req.params.id;
-        const userId = req.user.id;
 
-        try {
-            await Cart.findByIdAndDelete({ _id: cartItemId });
-            const count = await Cart.countDocuments({ userId });
-
-            return res.status(200).json({ message: 'Item removed from cart', count });
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    },
     getCart: async (req, res) => {
         const userId = req.user.id;
 
         try {
             const cartItems = await Cart.find({ userId }).populate({
                 path: 'productId',
-                select: 'imageUrl title restaurant rating ratingCount'
+                select: 'imageUrl title restaurant rating ratingCount '
             });
-            return res.status(200).json({ cartItems });
+            return res.status(200).json(cartItems);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
@@ -84,5 +73,18 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
-    }
+    },
+    removeCartItem: async (req, res) => {
+        const cartItemId = req.params.id;
+        const userId = req.user.id;
+
+        try {
+            await Cart.findByIdAndDelete({ _id: cartItemId });
+            const count = await Cart.countDocuments({ userId });
+
+            return res.status(200).json({ message: 'Item removed from cart', count });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
 }

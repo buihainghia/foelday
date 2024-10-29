@@ -24,6 +24,10 @@ const CartSchema = new Schema({
     quantity: {
         type: Number,
         required: true
+    },
+    note: {
+        type: String,
+        required: false
     }
 }, { timestamps: true })
 

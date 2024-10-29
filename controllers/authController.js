@@ -71,9 +71,11 @@ module.exports = {
             if (originalPassword !== req.body.password) {
                 return res.status(400).json({ message: 'Wrong password' });
             }
+
             if (user.verification === false) {
                 return res.status(400).json({ message: 'Please verify your email' });
             }
+
             const userToken = jwt.sign({ id: user._id, userType: user.userType, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             const { password, otp, ...others } = user._doc;
