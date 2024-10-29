@@ -7,6 +7,7 @@ router.post('/', verifyTokenAndAuthorization, cartController.addProductToCart);
 router.patch('/decrement/:id', verifyTokenAndAuthorization, cartController.decrementProductQuantity);
 router.patch('/increment/:id', verifyTokenAndAuthorization, cartController.incrementProductQuantity);
 
+
 router.delete('/:id', verifyTokenAndAuthorization, cartController.removeCartItem);
 
 router.get('/', verifyTokenAndAuthorization, cartController.getCart);

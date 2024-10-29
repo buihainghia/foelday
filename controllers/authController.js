@@ -48,6 +48,7 @@ module.exports = {
     },
 
     loginUser: async (req, res) => {
+
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         if (!emailRegex.test(req.body.email)) {
@@ -64,8 +65,8 @@ module.exports = {
             if (!user) {
                 return res.status(400).json({ message: 'User not found' });
             }
-            if (userType !== req.params.userType) {
-                return res.status(400).json({ message: 'User not found' });
+            if (user.userType !== req.params.userType) {
+                return res.status(400).json({ message: 'User type is not correct' });
             }
             const bytes = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY);
             const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
