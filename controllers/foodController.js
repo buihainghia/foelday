@@ -187,5 +187,19 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
+    },
+
+    getFoodByRestaurantAndCategory: async (req, res) => {
+        const { restaurantId, category } = req.params;
+
+        try {
+            const foods = await Food.find({ restaurant: restaurantId, category: category });
+            if (foods.length === 0) {
+                return res.status(200).json([]);
+            }
+            return res.status(200).json(foods);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
     }
-}
+};
