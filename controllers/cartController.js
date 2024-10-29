@@ -32,7 +32,7 @@ module.exports = {
                 path: 'productId',
                 select: 'imageUrl title restaurant rating ratingCount '
             });
-            return res.status(200).json(cartItems);
+            return res.status(200).json({ cartItems });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
@@ -74,6 +74,29 @@ module.exports = {
             return res.status(500).json({ error: error.message });
         }
     },
+
+    incrementProductQuantity: async (req, res) => {
+        const userId = req.user.id;
+        const id = req.params.id;
+
+        try {
+            const cartItem = await Cart.findById(id);
+
+            if (cartItem) {
+                const productPrice = cartItem.totalPrice / cartItem.quantity;
+
+                cartItem.quantity += 1;
+                cartItem.totalPrice += productPrice;
+                await cartItem.save();
+                return res.status(200).json({ message: 'Product quantity incremented successfully' });
+            } else {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
     removeCartItem: async (req, res) => {
         const cartItemId = req.params.id;
         const userId = req.user.id;
