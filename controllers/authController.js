@@ -64,7 +64,9 @@ module.exports = {
             if (!user) {
                 return res.status(400).json({ message: 'User not found' });
             }
-
+            if (userType !== req.params.userType) {
+                return res.status(400).json({ message: 'User not found' });
+            }
             const bytes = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY);
             const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
 
