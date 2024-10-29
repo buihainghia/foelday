@@ -9,7 +9,7 @@ router.get("/:id", foodController.getFoodById);
 router.get('/category/:category', foodController.getFoodsBycategory);
 router.get("/restaurant-foods/:id", foodController.getFoodsByRestaurant);
 router.get("/search/:search", foodController.searchFoods);
-router.get("/:restaurantId/:category", verifyTokenAndVendor, foodController.getFoodByRestaurantAndCategory);
+router.get("/:restaurantId/:category", foodController.getFoodByRestaurantAndCategory);
 router.get("/byCode/:code", foodController.getAllFoodsByCode);
 
 module.exports = router;
