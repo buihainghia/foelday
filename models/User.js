@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+        vefifyVendor: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
     phone: {
         type: String,
         default: "0123456789"
