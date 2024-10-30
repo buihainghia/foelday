@@ -36,12 +36,13 @@ module.exports = {
                 otp,
                 otpExpires,
                 uid: uuidv4(),
+                ...(req.params.userType === 'Vendor' && { verifyVendor: false })
             });
 
             sendMail(newUser.email, otp);
 
             const result = await newUser.save();
-            return res.status(201).json({ message: 'User created', result });
+            return res.status(201).json({ message: `${req.params.userType} created`, result });
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
